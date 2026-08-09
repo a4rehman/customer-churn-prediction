@@ -1,0 +1,9 @@
+{
+  "best_model": "LogisticRegression",
+  "trained_at": "2026-08-09T13:04:15",
+  "n_samples": 10000,
+  "n_features_after_encoding": 52,
+  "n_selected_features": 43,
+  "roc_auc": 0.8437,
+  "pr_auc": 0.6807
+}

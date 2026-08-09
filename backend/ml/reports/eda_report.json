@@ -1,0 +1,224 @@
+{
+  "rows": 10000,
+  "columns": [
+    "customerID",
+    "gender",
+    "SeniorCitizen",
+    "Partner",
+    "Dependents",
+    "tenure",
+    "PhoneService",
+    "MultipleLines",
+    "InternetService",
+    "OnlineSecurity",
+    "OnlineBackup",
+    "DeviceProtection",
+    "TechSupport",
+    "StreamingTV",
+    "StreamingMovies",
+    "Contract",
+    "PaperlessBilling",
+    "PaymentMethod",
+    "MonthlyCharges",
+    "TotalCharges",
+    "Churn",
+    "CustomerID",
+    "tenure_bucket",
+    "total_services",
+    "avg_charge_per_service",
+    "charge_to_tenure_ratio",
+    "loyalty_score",
+    "is_fiber",
+    "no_internet",
+    "new_customer",
+    "payment_automatic"
+  ],
+  "churn_rate": 0.2675,
+  "churned": 2675,
+  "retained": 7325,
+  "missing": {},
+  "numeric_summary": {
+    "SeniorCitizen": {
+      "mean": 0.162,
+      "std": 0.368,
+      "min": 0.0,
+      "q25": 0.0,
+      "median": 0.0,
+      "q75": 0.0,
+      "max": 1.0
+    },
+    "tenure": {
+      "mean": 29.138,
+      "std": 18.315,
+      "min": 0.0,
+      "q25": 15.0,
+      "median": 25.0,
+      "q75": 40.0,
+      "max": 72.0
+    },
+    "MonthlyCharges": {
+      "mean": 38.802,
+      "std": 12.434,
+      "min": 15.0,
+      "q25": 29.075,
+      "median": 40.275,
+      "q75": 47.89,
+      "max": 78.22
+    },
+    "TotalCharges": {
+      "mean": 1132.106,
+      "std": 832.935,
+      "min": 0.0,
+      "q25": 510.433,
+      "median": 916.455,
+      "q75": 1555.815,
+      "max": 5396.8
+    },
+    "total_services": {
+      "mean": 1.544,
+      "std": 1.297,
+      "min": 0.0,
+      "q25": 0.0,
+      "median": 2.0,
+      "q75": 2.0,
+      "max": 6.0
+    },
+    "avg_charge_per_service": {
+      "mean": 11.746,
+      "std": 2.675,
+      "min": 7.5,
+      "q25": 10.016,
+      "median": 11.282,
+      "q75": 12.783,
+      "max": 41.01
+    },
+    "charge_to_tenure_ratio": {
+      "mean": 2.235,
+      "std": 3.182,
+      "min": 0.205,
+      "q25": 0.861,
+      "median": 1.424,
+      "q75": 2.491,
+      "max": 66.8
+    },
+    "loyalty_score": {
+      "mean": 0.755,
+      "std": 0.158,
+      "min": 0.162,
+      "q25": 0.66,
+      "median": 0.768,
+      "q75": 0.871,
+      "max": 1.003
+    },
+    "is_fiber": {
+      "mean": 0.438,
+      "std": 0.496,
+      "min": 0.0,
+      "q25": 0.0,
+      "median": 0.0,
+      "q75": 1.0,
+      "max": 1.0
+    },
+    "no_internet": {
+      "mean": 0.213,
+      "std": 0.409,
+      "min": 0.0,
+      "q25": 0.0,
+      "median": 0.0,
+      "q75": 0.0,
+      "max": 1.0
+    },
+    "new_customer": {
+      "mean": 0.051,
+      "std": 0.22,
+      "min": 0.0,
+      "q25": 0.0,
+      "median": 0.0,
+      "q75": 0.0,
+      "max": 1.0
+    },
+    "payment_automatic": {
+      "mean": 0.436,
+      "std": 0.496,
+      "min": 0.0,
+      "q25": 0.0,
+      "median": 0.0,
+      "q75": 1.0,
+      "max": 1.0
+    }
+  },
+  "categorical_churn_rate": {
+    "gender": {
+      "Female": 0.263,
+      "Male": 0.272
+    },
+    "Partner": {
+      "No": 0.298,
+      "Yes": 0.234
+    },
+    "Dependents": {
+      "No": 0.282,
+      "Yes": 0.234
+    },
+    "PhoneService": {
+      "No": 0.267,
+      "Yes": 0.268
+    },
+    "MultipleLines": {
+      "No": 0.261,
+      "Yes": 0.277
+    },
+    "InternetService": {
+      "DSL": 0.157,
+      "Fiber optic": 0.394,
+      "No": 0.189
+    },
+    "OnlineSecurity": {
+      "No": 0.28,
+      "Yes": 0.226
+    },
+    "OnlineBackup": {
+      "No": 0.27,
+      "Yes": 0.261
+    },
+    "DeviceProtection": {
+      "No": 0.267,
+      "Yes": 0.269
+    },
+    "TechSupport": {
+      "No": 0.279,
+      "Yes": 0.223
+    },
+    "StreamingTV": {
+      "No": 0.25,
+      "Yes": 0.307
+    },
+    "StreamingMovies": {
+      "No": 0.251,
+      "Yes": 0.306
+    },
+    "Contract": {
+      "Month-to-month": 0.402,
+      "One year": 0.128,
+      "Two year": 0.086
+    },
+    "PaperlessBilling": {
+      "No": 0.208,
+      "Yes": 0.308
+    },
+    "PaymentMethod": {
+      "Bank transfer (automatic)": 0.214,
+      "Credit card (automatic)": 0.226,
+      "Electronic check": 0.342,
+      "Mailed check": 0.242
+    },
+    "tenure_bucket": {
+      "0-6": 0.351,
+      "13-24": 0.284,
+      "25-36": 0.256,
+      "37-48": 0.228,
+      "49+": 0.216,
+      "7-12": 0.313
+    }
+  }
+}
