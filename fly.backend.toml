@@ -1,0 +1,45 @@
+# Fly.io config for the FastAPI backend.
+# Deploy from the repo root:
+#   flyctl launch --config fly.backend.toml --no-deploy
+#   flyctl secrets set --config fly.backend.toml SECRET_KEY=... ADMIN_PASSWORD=...
+#   flyctl deploy --config fly.backend.toml --remote-only
+
+app = "churniq-backend"
+primary_region = "iad"
+
+[build]
+  dockerfile = "backend/Dockerfile"
+
+[env]
+  ADMIN_USERNAME = "admin"
+  ADMIN_EMAIL = "admin@churn.local"
+  DATABASE_URL = "sqlite:////data/churn.db"
+  # Public URL of the frontend app (same-origin API calls via nginx, so CORS barely matters)
+  CORS_ORIGINS = "https://churniq-frontend.fly.dev"
+  SEED_DB_ON_START = "true"
+
+# Persistent SQLite volume so predictions/auth/users survive redeploys
+[mounts]
+  source = "churniq_data"
+  destination = "/data"
+  initial_size = "1gb"
+
+# 1GB RAM: sklearn/xgboost/shap imports need headroom
+[vm]
+  memory = "1gb"
+  cpu_kind = "shared"
+  cpus = 1
+
+[http_service]
+  internal_port = 8000
+  force_https = true
+  auto_stop_machines = false
+  auto_start_machines = true
+  min_machines_running = 1
+
+  [[http_service.checks]]
+    interval = "30s"
+    timeout = "5s"
+    grace_period = "30s"
+    method = "GET"
+    path = "/api/health"

@@ -1,0 +1,34 @@
+# Fly.io config for the React/nginx frontend.
+# Deploy from the repo root:
+#   flyctl launch --config fly.frontend.toml --no-deploy
+#   flyctl deploy --config fly.frontend.toml --remote-only
+
+app = "churniq-frontend"
+primary_region = "iad"
+
+[build]
+  dockerfile = "frontend/Dockerfile"
+
+[env]
+  # Fly private network: frontend reaches the backend over the internal hostname.
+  # Both apps must be in the same Fly org.
+  BACKEND_UPSTREAM = "http://churniq-backend.internal:8000"
+
+[vm]
+  memory = "512mb"
+  cpu_kind = "shared"
+  cpus = 1
+
+[http_service]
+  internal_port = 80
+  force_https = true
+  auto_stop_machines = false
+  auto_start_machines = true
+  min_machines_running = 1
+
+  [[http_service.checks]]
+    interval = "30s"
+    timeout = "5s"
+    grace_period = "15s"
+    method = "GET"
+    path = "/"

@@ -7,7 +7,11 @@ COPY frontend/ .
 RUN npm run build
 
 FROM nginx:alpine AS serve
-COPY deploy/nginx/nginx.conf /etc/nginx/conf.d/default.conf
+# NGINX_ENVSUBST_FILTER whitelists which env var gets substituted into the template,
+# so nginx's own $host/$uri variables stay intact.
+ENV BACKEND_UPSTREAM=http://backend:8000 \
+    NGINX_ENVSUBST_FILTER=BACKEND_UPSTREAM
+COPY deploy/nginx/default.conf.template /etc/nginx/templates/default.conf.template
 COPY --from=build /app/dist /usr/share/nginx/html
 EXPOSE 80
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \

@@ -158,6 +158,55 @@ environment variables — copy `.env.example` to `.env` and adjust secrets.
 
 ---
 
+## Deploy to Fly.io
+
+Prerequisites: install the Fly CLI and authenticate once (browser login):
+
+```powershell
+powershell -ExecutionPolicy Bypass -Command "Invoke-WebRequest https://fly.io/install.ps1 -UseBasicParsing | Invoke-Expression"
+~/.fly/bin/flyctl.exe auth login
+```
+
+Then, from the repo root, either run the helper or the manual steps:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/fly_deploy.ps1
+```
+
+Manual steps (equivalent):
+
+```powershell
+flyctl apps create churniq-backend
+flyctl apps create churniq-frontend
+flyctl volumes create churniq_data --app churniq-backend --size 1 --region iad
+
+flyctl secrets set --config fly.backend.toml SECRET_KEY=<random> ADMIN_PASSWORD=<strong-password>
+
+flyctl deploy --config fly.backend.toml --remote-only   # remote build trains the model
+flyctl deploy --config fly.frontend.toml --remote-only
+```
+
+| Service   | URL                            |
+|-----------|--------------------------------|
+| Frontend  | https://churniq-frontend.fly.dev |
+| API docs  | https://churniq-backend.fly.dev/docs |
+
+How it works:
+
+- `fly.backend.toml` runs the FastAPI service with **1 GB RAM** (sklearn/xgboost/SHAP need headroom)
+  and a persistent **SQLite volume** (`churniq_data` → `/data`) so users and prediction history survive
+  redeploys. Set `DATABASE_URL` to Fly Postgres instead for multi-instance scale.
+- `fly.frontend.toml` runs nginx serving the React build; it proxies `/api/*` to the backend over Fly's
+  **private network** (`churniq-backend.internal:8000`) — no CORS in production.
+- `--remote-only` builds on Fly's infrastructure, so **Docker is not needed locally**.
+- The backend image trains the model during the image build, so the first deploy takes a few minutes.
+- Sign in with `admin` / your `ADMIN_PASSWORD`.
+
+> If the app names are taken on Fly, rename them in the `fly.*.toml` files and update the
+> `BACKEND_UPSTREAM` value in `fly.frontend.toml` to match.
+
+---
+
 ## CI/CD
 
 `.github/workflows/ci.yml`:

@@ -9,9 +9,10 @@ server {
     gzip_types text/plain text/css application/json application/javascript image/svg+xml;
     gzip_min_length 1024;
 
-    # API proxy to the FastAPI backend
+    # API proxy to the FastAPI backend.
+    # Value is injected at container start via envsubst (BACKEND_UPSTREAM).
     location /api/ {
-        proxy_pass http://backend:8000;
+        proxy_pass ${BACKEND_UPSTREAM};
         proxy_http_version 1.1;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
