@@ -1,0 +1,17 @@
+.git/
+.gitignore
+*.pyc
+__pycache__/
+.vscode/
+.idea/
+node_modules/
+backend/churn.db
+*.db
+*.sqlite3
+.env
+.env.local
+.DS_Store
+venv/
+.venv/
+mlruns/
+*.log

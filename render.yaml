@@ -1,0 +1,31 @@
+services:
+  - type: web
+    name: customer-churn-prediction
+    runtime: python
+    region: oregon
+    plan: free
+    rootDir: .
+    buildCommand: >
+      cd frontend && npm install && npm run build && cd .. &&
+      pip install -r backend/requirements.txt
+    startCommand: >
+      cd backend && python -m uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ADMIN_USERNAME
+        value: admin
+      - key: ADMIN_PASSWORD
+        value: admin123
+      - key: ADMIN_EMAIL
+        value: admin@churn.local
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: "720"
+      - key: DATABASE_URL
+        value: sqlite:///./churn.db
+      - key: CORS_ORIGINS
+        value: "*"
+      - key: SEED_DB_ON_START
+        value: "true"
+      - key: PYTHON_VERSION
+        value: "3.11.0"
