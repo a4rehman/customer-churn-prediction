@@ -1,3 +1,14 @@
+---
+title: Customer Churn Prediction
+emoji: 📊
+colorFrom: blue
+colorTo: indigo
+sdk: gradio
+sdk_version: 5.31.0
+app_file: app.py
+pinned: false
+---
+
 # ChurnIQ — Enterprise Customer Churn Prediction System
 
 An enterprise-grade, end-to-end customer churn prediction platform with a production-ready ML pipeline,
