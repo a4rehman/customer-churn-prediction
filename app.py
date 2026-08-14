@@ -6,6 +6,13 @@ import pandas as pd
 import gradio as gr
 from pathlib import Path
 
+try:
+    import spaces
+    gpu_decorator = spaces.GPU
+except (ImportError, AttributeError):
+    def gpu_decorator(func):
+        return func
+
 # ── Paths ──────────────────────────────────────────────────────────────────
 ROOT_DIR   = Path(__file__).resolve().parent
 BACKEND_DIR = ROOT_DIR / "backend"
@@ -16,7 +23,7 @@ for p in [str(BACKEND_DIR), str(ML_DIR)]:
     if p not in sys.path:
         sys.path.insert(0, p)
 
-# ── Load artifacts directly (no FastAPI / SQLAlchemy imports needed) ────────
+# ── Load artifacts directly ────────────────────────────────────────────────
 preprocessor   = joblib.load(ARTIFACTS / "preprocessor.pkl")
 selector       = joblib.load(ARTIFACTS / "selector.pkl")
 model          = joblib.load(ARTIFACTS / "model.pkl")
@@ -75,6 +82,7 @@ def engineer_features(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+@gpu_decorator
 def predict_churn(
     gender, senior_citizen, partner, dependents, tenure,
     phone_service, multiple_lines, internet_service, online_security,
