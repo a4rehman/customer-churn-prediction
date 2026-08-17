@@ -31,55 +31,9 @@ model          = joblib.load(ARTIFACTS / "model.pkl")
 with open(ARTIFACTS / "feature_names.json", "r") as f:
     feature_names = json.load(f)
 
-NUMERIC_COLUMNS = [
-    "tenure", "MonthlyCharges", "TotalCharges",
-    "num_services", "avg_monthly", "tenure_monthly_ratio",
-    "is_long_term", "is_fiber", "is_monthly_contract",
-    "loyalty_score"
-]
+# Import engineered features definitions directly from ml.features to maintain consistency with training
+from ml.features import CATEGORICAL_COLUMNS, NUMERIC_COLUMNS, engineer as engineer_features
 
-CATEGORICAL_COLUMNS = [
-    "gender", "SeniorCitizen", "Partner", "Dependents",
-    "PhoneService", "MultipleLines", "InternetService",
-    "OnlineSecurity", "OnlineBackup", "DeviceProtection",
-    "TechSupport", "StreamingTV", "StreamingMovies",
-    "Contract", "PaperlessBilling", "PaymentMethod",
-    "tenure_bucket"
-]
-
-def engineer_features(df: pd.DataFrame) -> pd.DataFrame:
-    """Minimal feature engineering matching training pipeline."""
-    df = df.copy()
-    df["SeniorCitizen"] = df["SeniorCitizen"].astype(int)
-
-    service_cols = [
-        "PhoneService", "MultipleLines", "OnlineSecurity",
-        "OnlineBackup", "DeviceProtection", "TechSupport",
-        "StreamingTV", "StreamingMovies"
-    ]
-    for c in service_cols:
-        if c in df.columns:
-            df[c] = df[c].replace("No phone service", "No").replace("No internet service", "No")
-
-    df["num_services"] = df[[c for c in service_cols if c in df.columns]].apply(
-        lambda row: (row == "Yes").sum(), axis=1
-    )
-    df["avg_monthly"] = df["MonthlyCharges"]
-    df["tenure_monthly_ratio"] = df.apply(
-        lambda r: r["MonthlyCharges"] / (r["tenure"] + 1), axis=1
-    )
-    df["is_long_term"] = (df["Contract"] != "Month-to-month").astype(int)
-    df["is_fiber"]     = (df["InternetService"] == "Fiber optic").astype(int)
-    df["is_monthly_contract"] = (df["Contract"] == "Month-to-month").astype(int)
-    df["loyalty_score"] = df["tenure"] * df["num_services"]
-
-    bins   = [0, 12, 24, 48, 72]
-    labels = ["0-12", "12-24", "24-48", "48-72"]
-    df["tenure_bucket"] = pd.cut(
-        df["tenure"].clip(0, 72), bins=bins, labels=labels, include_lowest=True
-    ).astype(str)
-
-    return df
 
 
 @gpu_decorator
